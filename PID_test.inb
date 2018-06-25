@@ -1,0 +1,89 @@
+#DEFINE KP 2
+#DEFINE KI 0
+#DEFINE KD 0
+
+Dim Error As Float
+Dim Setpoint AS Float
+Dim Actual AS Float
+Dim Integral As Float
+Dim Derivative AS Float
+Dim Pre_Error AS Float
+Dim out AS Float
+
+Dim wheel As Word
+
+Sub Main()
+	Out 	= 0
+    Integral 	= 0
+    Pre_Error  	= 0
+	Setpoint = 0
+	Low 11
+	Low 10
+	
+	Do	
+		Debugin CR,"SET:", Setpoint, CR	
+		Rturn_ninty()
+		Debugin CR,"ACT:", Actual, CR
+		PID()
+		Debugfile Error,",",Integral,",",Derivative,CR	
+		Debugfile "Output:",Out,CR
+		Pause 1000
+	LOOP		
+End Sub
+
+'--------------------------------------------------
+
+Sub straight()	'直走
+	Pulseout(11,400)	'於引腳11上產生，寬度為2.5ms的脈波
+	Pulseout(10,100)			
+	Pause 16
+End Sub
+
+Sub	stop() '停止
+	For wheel=0 To 1
+		Pulseout(11,300)	'於引腳11上產生，寬度為2.5ms的脈波
+		Pulseout(10,300)			
+		Pause 16
+	Next
+End Sub
+
+Sub Rturn()	'右轉
+	For wheel=0 To 1
+		Pulseout(11,320)	'於引腳11上產生，寬度為2.5ms的脈波
+		Pulseout(10,300)			
+		Pause 16
+	Next
+End Sub
+
+Sub Lturn()	'左轉
+	For wheel=0 To 1
+		Pulseout(11,300)	'於引腳11上產生，寬度為2.5ms的脈波
+		Pulseout(10,280)			
+		Pause 16
+	Next
+End Sub
+
+Sub Rturn_ninty() '右轉90	
+	For wheel=0 To 60
+		Pulseout(11,400)	'於引腳11上產生，寬度為2.5ms的脈波
+		Pulseout(10,300)			
+		Pause 16
+	Next
+End Sub
+
+Sub Lturn_ninty()	'左轉90	
+	For wheel=0 To 60
+		Pulseout(11,300)	'於引腳11上產生，寬度為2.5ms的脈波
+		Pulseout(10,200)			
+		Pause 16
+	Next
+End Sub
+
+Sub PID()
+	Error		= Setpoint - Actual	
+    Integral 	= Integral + Error    
+    Derivative	= Error - Pre_Error
+    Out	= (KP * Error) + (KI * Integral) + (KD * Derivative)
+    Pre_Error	= Error
+End Sub
+
