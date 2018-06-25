@@ -33,47 +33,47 @@ End Sub
 
 '--------------------------------------------------
 
-Sub straight()	'ª½¨«
-	Pulseout(11,400)	'©ó¤Ş¸}11¤W²£¥Í¡A¼e«×¬°2.5msªº¯ßªi
+Sub straight()	'ç›´èµ°
+	Pulseout(11,400)	'æ–¼å¼•è…³11ä¸Šç”¢ç”Ÿï¼Œå¯¬åº¦ç‚º2.5msçš„è„ˆæ³¢
 	Pulseout(10,100)			
 	Pause 16
 End Sub
 
-Sub	stop() '°±¤î
+Sub	stop() 'åœæ­¢
 	For wheel=0 To 1
-		Pulseout(11,300)	'©ó¤Ş¸}11¤W²£¥Í¡A¼e«×¬°2.5msªº¯ßªi
+		Pulseout(11,300)	'æ–¼å¼•è…³11ä¸Šç”¢ç”Ÿï¼Œå¯¬åº¦ç‚º2.5msçš„è„ˆæ³¢
 		Pulseout(10,300)			
 		Pause 16
 	Next
 End Sub
 
-Sub Rturn()	'¥kÂà
+Sub Rturn()	'å³è½‰
 	For wheel=0 To 1
-		Pulseout(11,320)	'©ó¤Ş¸}11¤W²£¥Í¡A¼e«×¬°2.5msªº¯ßªi
+		Pulseout(11,320)	'æ–¼å¼•è…³11ä¸Šç”¢ç”Ÿï¼Œå¯¬åº¦ç‚º2.5msçš„è„ˆæ³¢
 		Pulseout(10,300)			
 		Pause 16
 	Next
 End Sub
 
-Sub Lturn()	'¥ªÂà
+Sub Lturn()	'å·¦è½‰
 	For wheel=0 To 1
-		Pulseout(11,300)	'©ó¤Ş¸}11¤W²£¥Í¡A¼e«×¬°2.5msªº¯ßªi
+		Pulseout(11,300)	'æ–¼å¼•è…³11ä¸Šç”¢ç”Ÿï¼Œå¯¬åº¦ç‚º2.5msçš„è„ˆæ³¢
 		Pulseout(10,280)			
 		Pause 16
 	Next
 End Sub
 
-Sub Rturn_ninty() '¥kÂà90	
+Sub Rturn_ninty() 'å³è½‰90	
 	For wheel=0 To 60
-		Pulseout(11,400)	'©ó¤Ş¸}11¤W²£¥Í¡A¼e«×¬°2.5msªº¯ßªi
+		Pulseout(11,400)	'æ–¼å¼•è…³11ä¸Šç”¢ç”Ÿï¼Œå¯¬åº¦ç‚º2.5msçš„è„ˆæ³¢
 		Pulseout(10,300)			
 		Pause 16
 	Next
 End Sub
 
-Sub Lturn_ninty()	'¥ªÂà90	
+Sub Lturn_ninty()	'å·¦è½‰90	
 	For wheel=0 To 60
-		Pulseout(11,300)	'©ó¤Ş¸}11¤W²£¥Í¡A¼e«×¬°2.5msªº¯ßªi
+		Pulseout(11,300)	'æ–¼å¼•è…³11ä¸Šç”¢ç”Ÿï¼Œå¯¬åº¦ç‚º2.5msçš„è„ˆæ³¢
 		Pulseout(10,200)			
 		Pause 16
 	Next
