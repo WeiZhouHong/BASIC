@@ -1,0 +1,36 @@
+Peripheral mySonar1 As SonarA @ 1		'設定模組編號為0
+Peripheral mySonar2 As SonarA @ 2
+Peripheral mySonar3 As SonarA @ 3
+
+Dim Status As Byte						'儲存取得的偵測結果狀態
+Dim Distance1 As Word					'儲存取得的偵測結果
+Dim Distance2 As Word
+Dim Distance3 As Word
+
+Sub MAIN()							
+	Do
+		mySonar1.SetFloorLevel(0)				'設定離地高度為大於5cm
+		mySonar1.SetRangingTime(63)			'設定等待接收時間為63ms	
+		mySonar1.SetBurstPower(10)				'設定發射強度等級為 10
+		
+		mySonar2.SetFloorLevel(0)				'設定離地高度為大於5cm
+		mySonar2.SetRangingTime(63)			'設定等待接收時間為63ms	
+		mySonar2.SetBurstPower(10)				'設定發射強度等級為 10
+		
+		mySonar3.SetFloorLevel(0)				'設定離地高度為大於5cm
+		mySonar3.SetRangingTime(63)			'設定等待接收時間為63ms	
+		mySonar3.SetBurstPower(10)				'設定發射強度等級為 10
+		
+		Do
+			mySonar1.Ranging()					'執行重復偵測
+			mySonar2.Ranging()
+			mySonar3.Ranging()	
+			Pause 75						'等待100ms
+			Status= mySonar1.GetDistance(1,Distance1)	'取得偵測結果
+			Status= mySonar2.GetDistance(1,Distance2)
+			Status= mySonar3.GetDistance(1,Distance3)
+		Loop Until Status = 1					'迴圈停止條件(Status = 1)
+		
+		Debug "Distance=",Distance1,",",Distance2,",",Distance3,"cm",CR	'顯示偵測結果
+	Loop	
+End Sub	

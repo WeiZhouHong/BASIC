@@ -1,0 +1,66 @@
+Peripheral Ps As GamePadPs @ 31 		'設定模組編號
+Peripheral LMotor As MotorRunnerC @ 11 	'設定模組編號為0
+Peripheral RMotor As MotorRunnerC @ 12	'設定模組編號為1
+
+Dim b4Dir As Byte 			'儲存取得的方向值
+Dim b8WayL,b8WayR As Byte 	'儲存取得的操縱桿方向值
+Dim wStatus As Word 		'儲存取得的按鈕狀態值
+
+Sub Main()
+	Ps.EnableKeyPressedEvent() 			'啟動按鈕按下事件
+    Ps.EnableKeyReleasedEvent() 		'啟動按鈕放開事件
+    
+    Debug "***** GamePadPs Demo *****" 	'終端視窗顯示規劃
+    Debug CSRXY(1,2),"Direction:"		'方向鍵
+    Debug CSRXY(1,3),"RStick8Way:"		'右操縱桿
+    Debug CSRXY(1,4),"LStick8Way:"		'左操縱桿
+    Debug CSRXY(1,5),"GetKeyStatus:"	'功能鍵(△、○、╳、□)
+      
+    Do
+      Ps.GetDir4Way(b4Dir)				'以四向回傳方式，取得方向鍵狀態
+      Debug CSRXY(11,2),b4Dir 			'於終端視窗(第11行，第2列)顯示
+      Ps.GetR8WayValue(b8WayR)			'以八向回傳方式，取得右邊操縱桿狀態
+      Debug CSRXY(12,3),b8WayR 			'於終端視窗(第12行，第3列)顯示
+      Ps.GetL8WayValue(b8WayL) 			'以八向回傳方式，取得左邊操縱桿狀態
+      Debug CSRXY(12,4),b8WayL 			'於終端視窗(第12行，第4列)顯示
+      Debug CSRXY(15,5),%BIN12 wStatus 	'於終端視窗(第15行，第5列)，以二進制顯示 
+      
+      Motor()    
+    Loop    
+End Sub
+
+Event Ps.KeyPressedEvent() 		'按鈕按下事件
+    wStatus = Ps.GetKeyStatus 	'取得當下按鈕狀態，存放於wStatus中
+End Event
+
+Event Ps.KeyReleasedEvent() 	'按鈕放開事件
+    wStatus = Ps.GetKeyStatus 	'更新當下按鈕狀態，存放於wStatus中
+End Event
+
+Sub Motor()
+	If (b4Dir=1) Then 			'右轉
+		LMotor.Forward(150) 	'讓馬達以150的速度向前轉動
+		RMotor.Backward(150)  	'讓馬達以150的速度向前轉動
+		Pause 300
+		RMotor.Stop()			'停止馬達轉動
+		LMotor.Stop() 			'停止馬達轉動		 			
+	ElseIf (b4Dir=2) Then		'後退
+		LMotor.Backward(150) 			
+		RMotor.Backward(150) 				
+		Pause 300
+		LMotor.Stop() 						
+		RMotor.Stop() 						
+	ElseIf (b4Dir=3) Then		'左轉
+		LMotor.Backward(150)  				
+		RMotor.Forward(150) 				
+		Pause 300
+		RMotor.Stop() 
+		LMotor.Stop() 										
+	ElseIf (b4Dir=4) Then		'前進
+		LMotor.Forward(150) 				
+		RMotor.Forward(150) 				
+		Pause 300
+		LMotor.Stop() 						
+		RMotor.Stop() 							
+	End If    
+End Sub

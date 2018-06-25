@@ -1,0 +1,136 @@
+Peripheral mySonar1 As SonarA @ 1
+Peripheral mySonar2 As SonarA @ 2
+Peripheral mySonar3 As SonarA @ 0
+
+Dim wheel As Word
+Dim Status As Byte
+Dim Distance1 As Word
+Dim Distance2 As Word
+Dim Distance3 As Word
+
+Sub Main()
+	Low 11
+	Low 10
+	
+	sonar_initialization()
+	
+	Do		
+		sonar()
+		
+		If (distance1<45)Then
+			Rturn()
+		Elseif (distance2<45) Then
+			Lturn()
+		ElseIf (Distance3<30)Then
+			If (Distance1<Distance2) Then
+				Rturn_ninty()
+			Else
+				Lturn_ninty()
+			End if
+		Else
+			If (Distance1<Distance2) Then
+				If (Distance2-Distance1>30)Then
+					straight()
+				Else
+					Rturn()
+				End If
+				
+			Elseif (Distance1>Distance2) Then
+				If (Distance1-Distance2>30) Then
+					straight()
+				Else
+					Lturn()
+				End If				
+			Else
+				straight()
+			End if
+		End If
+	LOOP 	
+End Sub
+
+'--------------------------------------------------
+Sub sonar_initialization()
+	mySonar1.SetFloorLevel(0)				'設定離地高度為大於5cm
+	mySonar1.SetRangingTime(63)			'設定等待接收時間為63ms	
+	mySonar1.SetBurstPower(10)				'設定發射強度等級為 10
+	
+	mySonar2.SetFloorLevel(0)				'設定離地高度為大於5cm
+	mySonar2.SetRangingTime(63)			'設定等待接收時間為63ms	
+	mySonar2.SetBurstPower(10)				'設定發射強度等級為 10
+	 							
+	mySonar3.SetFloorLevel(0)				'設定離地高度為大於5cm
+	mySonar3.SetRangingTime(63)			'設定等待接收時間為63ms	
+	mySonar3.SetBurstPower(10)				'設定發射強度等級為 10
+End Sub
+
+Sub sonar()
+	Do
+		mySonar1.Ranging()
+		mySonar2.Ranging()
+		mySonar3.Ranging()	
+		Pause 50						'等待50ms
+		Status= mySonar1.GetDistance(1,Distance1)
+		Status= mySonar2.GetDistance(1,Distance2)
+		Status= mySonar3.GetDistance(1,Distance3)
+		
+		If(Distance1=0) Then	
+			Distance1=200
+		End If
+		
+		If(Distance2=0)	Then
+			Distance2=200
+		End If
+		
+		If(Distance3=0)	Then
+			Distance3=200
+			Status=1	
+		End If					
+		Debugfile Distance1,",",Distance2,",",Distance3,CR	'顯示偵測結果
+	Loop Until Status = 1					'迴圈停止條件(Status = 1)	
+End Sub
+
+Sub straight()	'直走
+	Pulseout(11,400)	'於引腳11上產生，寬度為2.5ms的脈波
+	Pulseout(10,100)			
+	Pause 16
+End Sub
+
+Sub	stop() '停止
+	For wheel=0 To 1
+		Pulseout(11,300)	'於引腳11上產生，寬度為2.5ms的脈波
+		Pulseout(10,300)			
+		Pause 16
+	Next
+End Sub
+
+Sub Rturn()	'右轉
+	For wheel=0 To 1
+		Pulseout(11,320)	'於引腳11上產生，寬度為2.5ms的脈波
+		Pulseout(10,300)			
+		Pause 16
+	Next
+End Sub
+
+Sub Lturn()	'左轉
+	For wheel=0 To 1
+		Pulseout(11,300)	'於引腳11上產生，寬度為2.5ms的脈波
+		Pulseout(10,280)			
+		Pause 16
+	Next
+End Sub
+
+Sub Rturn_ninty() '右轉90	
+	For wheel=0 To 60
+		Pulseout(11,400)	'於引腳11上產生，寬度為2.5ms的脈波
+		Pulseout(10,300)			
+		Pause 16
+	Next
+End Sub
+
+Sub Lturn_ninty()	'左轉90	
+	For wheel=0 To 60
+		Pulseout(11,300)	'於引腳11上產生，寬度為2.5ms的脈波
+		Pulseout(10,200)			
+		Pause 16
+	Next
+End Sub

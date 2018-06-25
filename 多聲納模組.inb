@@ -1,0 +1,68 @@
+Peripheral Sonar1 As SonarA @ 1	'設定SonarA模組編號為1
+Peripheral Sonar2 As SonarA @ 2
+Peripheral Sonar3 As SonarA @ 3
+
+Sub Main()	
+	Dim SonarCount As Byte
+	Dim allSonar As Byte
+	
+	allSonar = 3
+	
+	For SonarCount=1 To allSonar
+		Debugfile "sonar",(SonarCount) , ","	'印出SonarA模組編號
+	Next SonarCount
+	Debugfile CR 
+
+	Debug CSRXY(1,1),"***** Sonar Measurement:(cm) *****"		'於終端視窗(第1行，第1列)顯示
+    Debug CSRXY(1,2), "FS1 (1): "							
+    Debug CSRXY(1,3), "FS2 (2): "
+    Debug CSRXY(1,4), "FS3 (3): ", CR	
+
+    initialization()
+    
+    Do
+    	sonar()
+    Loop
+End Sub
+
+Sub initialization()	
+	'Sonar初始化
+	Sonar1.SetFloorLevel(0)		'設定離地高度為大於5cm
+	Sonar1.SetRangingTime(63)	'設定等待接收時間為63ms	
+	Sonar1.SetBurstPower(10)	'設定發射強度等級為 10
+	
+	Sonar2.SetFloorLevel(0)			
+	Sonar2.SetRangingTime(63)				
+	Sonar2.SetBurstPower(10)			
+	 							
+	Sonar3.SetFloorLevel(0)			
+	Sonar3.SetRangingTime(63)			
+	Sonar3.SetBurstPower(10)			
+End Sub
+
+'Sonar程式碼
+Sub sonar()
+	Dim Distance(3) As Word		'配置陣列空間 1~3
+	Dim Status As Word
+
+	Sonar1.Ranging()
+	Sonar2.Ranging()
+	Sonar3.Ranging()
+	Pause 25					'等待25ms
+	Sonar1.GetDistance(1, Distance(1))
+	Sonar2.GetDistance(1, Distance(2))
+	Sonar3.GetDistance(1, Distance(3))
+		
+	For Status=1 To 3
+		If (Distance(Status)=0) Then	
+			Distance(Status)=999
+		End If
+		Debugfile Distance(Status) , ","			
+	Next Status
+	
+	Debugfile CR
+	
+	Debug CSRXY(10,2), CLREOL, Distance(1)			'於終端視窗(第10行，第2列)顯示
+	Debug CSRXY(10,3), CLREOL, Distance(2) 
+	Debug CSRXY(10,4), CLREOL, Distance(3), CR	
+End Sub

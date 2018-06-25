@@ -1,0 +1,43 @@
+Dim X As Word
+
+Sub Main()
+	Low 11
+	Low 10
+	
+	Do 							'產生一個無窮迴圈
+		'順時針快轉
+		For X=0 To 100			'產生一個101次的迴圈
+			Pulseout(11,100)	'於引腳11上產生，寬度為0.5ms的脈波	
+			Pulseout(10,500)		
+			Pause 16 			'強制程式等待16毫秒
+		Next
+		
+		'順時針慢轉
+		For X=0 To 100
+			Pulseout(11,280)	'於引腳11上產生，寬度為1.4ms的脈波
+			Pulseout(10,320)	
+			Pause 16 
+		Next
+		
+		'停止
+		For X=0 To 100
+			Pulseout(11,300)	'於引腳11上產生，寬度為1.5ms的脈波	
+			Pulseout(10,300)	
+			Pause 16 
+		Next
+		
+		'逆時針慢轉	
+		For X=0 To 100
+			Pulseout(11,320)	'於引腳11上產生，寬度為1.6ms的脈波
+			Pulseout(10,280)			
+			Pause 16 
+		Next
+		
+		'逆時針快轉
+		For X=0 To 100
+			Pulseout(11,500)	'於引腳11上產生，寬度為2.5ms的脈波
+			Pulseout(10,100)			
+			Pause 16 
+		Next
+	Loop
+End Sub
